@@ -22,29 +22,36 @@ export default function Sidebar({ className }: SidebarProps) {
   };
 
   return (
-    <div className={'sidebar ' + className}>
-      <Link to="/" className="no-underline text-black">
-        <h1 className="font-semibold text-center">Carna Project</h1>
-      </Link>
-      <nav className="mt-5 flex flex-col gap-3 flex-grow">
-        <SidebarItem to="/">
-          <Home /> Dashboard
-        </SidebarItem>
-        <SidebarItem to="/courses">
-          <BookOpen /> Courses
-        </SidebarItem>
-        {authenticatedUser.role === 'admin' ? (
-          <SidebarItem to="/users">
-            <Users /> Users
+    <div className={'sidebar' + className}>
+      <img
+        className="absolute inset-0 object-cover w-full h-full z-[-1]"
+        src="/sidemenu-bg.jpg"
+      ></img>
+      <div className="absolute inset-0 bg-black opacity-70 z-0"></div>
+      <div className="flex flex-col relative flex z-10 h-full">
+        <Link to="/" className="flex justify-center items-center mb-5">
+          <img className="self-center" src="/urbano-logo-white.png"></img>
+        </Link>
+        <nav className="mt-16 flex flex-col gap-3 flex-grow">
+          <SidebarItem to="/">
+            <Home /> Dashboard
           </SidebarItem>
-        ) : null}
-      </nav>
-      <button
-        className="text-red-500 rounded-md p-3 transition-colors flex gap-3 justify-center items-center font-semibold focus:outline-none"
-        onClick={handleLogout}
-      >
-        <LogOut /> Logout
-      </button>
+          <SidebarItem to="/courses">
+            <BookOpen /> Courses
+          </SidebarItem>
+          {authenticatedUser.role === 'admin' ? (
+            <SidebarItem to="/users">
+              <Users /> Users
+            </SidebarItem>
+          ) : null}
+        </nav>
+        <button
+          className="mt-auto mb-5 text-red-500 rounded-md p-3 transition-colors flex gap-3 font-semibold focus:outline-none"
+          onClick={handleLogout}
+        >
+          <LogOut /> Logout
+        </button>
+      </div>
     </div>
   );
 }
