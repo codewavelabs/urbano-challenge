@@ -31,7 +31,9 @@ flex justify-center items-center backdrop-filter backdrop-blur transition-opacit
         show ? 'opacity-100' : 'opacity-0'
       } ${isVisible ? 'visible' : 'invisible'}`}
     >
-      <div className={'w-3/4 sm:w-1/2 card shadow relative ' + className}>
+      <div
+        className={'bg-white w-3/4 sm:w-1/2 card shadow relative ' + className}
+      >
         {children}
       </div>
     </div>,
