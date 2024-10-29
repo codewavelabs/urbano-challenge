@@ -19,7 +19,7 @@ export class CourseService {
       courseQuery[key] = ILike(`%${courseQuery[key]}%`);
     });
     return await Course.find({
-      where: courseQuery,
+      where: { ...courseQuery },
       order: {
         name: 'ASC',
         description: 'ASC',

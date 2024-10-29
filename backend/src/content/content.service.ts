@@ -30,7 +30,7 @@ export class ContentService {
     });
 
     return await Content.find({
-      where: contentQuery,
+      where: { ...contentQuery },
       order: {
         name: 'ASC',
         description: 'ASC',

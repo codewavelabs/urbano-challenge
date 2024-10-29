@@ -31,7 +31,7 @@ export class UserService {
     });
 
     return User.find({
-      where: userQuery,
+      where: { ...userQuery },
       order: {
         firstName: 'ASC',
         lastName: 'ASC',
