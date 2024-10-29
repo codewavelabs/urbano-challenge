@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Nunito+Sans:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,8 @@
   body,
   #root {
     @apply h-full;
+    @apply font-sans;
+    
   }
   h1 {
     @apply text-2xl;
@@ -24,8 +28,8 @@
 
 @layer components {
   .btn {
-    @apply p-3 bg-blue-500 rounded-md focus:outline-none text-white;
-    @apply hover:bg-blue-700 transition-all;
+    @apply p-3 bg-brand-primary rounded-md focus:outline-none text-white;
+    @apply hover:bg-brand-active transition-all;
     @apply focus:ring disabled:opacity-50;
   }
   .btn.danger {
@@ -35,7 +39,7 @@
     @apply rounded-md border-gray-300 transition-colors disabled:opacity-50;
   }
   .card {
-    @apply p-5 rounded-md bg-white border;
+    @apply p-5 rounded-md bg-primary-white border;
   }
   .table-container {
     @apply border rounded-lg mt-5 shadow overflow-x-auto;
