@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Loader, Plus, X } from 'react-feather';
+import { useEffect, useState } from 'react';
+import { Loader, Plus, RefreshCcw, X } from 'react-feather';
 import { useForm } from 'react-hook-form';
-import { useQuery } from 'react-query';
 
 import CoursesTable from '../components/courses/CoursesTable';
 import Layout from '../components/layout';
 import Modal from '../components/shared/Modal';
 import useAuth from '../hooks/useAuth';
+import Course from '../models/course/Course';
 import CreateCourseRequest from '../models/course/CreateCourseRequest';
 import courseService from '../services/CourseService';
 
@@ -18,17 +18,29 @@ export default function Courses() {
   const [error, setError] = useState<string>();
 
   const { authenticatedUser } = useAuth();
-  const { data, isLoading } = useQuery(
-    ['courses', name, description],
-    () =>
-      courseService.findAll({
-        name: name || undefined,
-        description: description || undefined,
-      }),
-    {
-      refetchInterval: 1000,
-    },
-  );
+  const [data, setData] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+
+    try {
+      setData(
+        await courseService.findAll({
+          name: name || undefined,
+          description: description || undefined,
+        }),
+      );
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const {
     register,
@@ -42,6 +54,7 @@ export default function Courses() {
       await courseService.save(createCourseRequest);
       setAddCourseShow(false);
       reset();
+      fetchData();
       setError(null);
     } catch (error) {
       setError(error.response.data.message);
@@ -52,14 +65,22 @@ export default function Courses() {
     <Layout>
       <h1 className="font-semibold text-3xl mb-5">Manage Courses</h1>
       <hr />
-      {authenticatedUser.role !== 'user' ? (
+      <div className="flex">
+        {authenticatedUser.role !== 'user' ? (
+          <button
+            className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"
+            onClick={() => setAddCourseShow(true)}
+          >
+            <Plus /> Add Course
+          </button>
+        ) : null}
         <button
-          className="btn my-5 flex gap-2 w-full sm:w-auto justify-center"
-          onClick={() => setAddCourseShow(true)}
+          className="ml-2 btn my-5 flex gap-2 w-full sm:w-auto justify-center"
+          onClick={() => fetchData()}
         >
-          <Plus /> Add Course
+          <RefreshCcw /> Refresh
         </button>
-      ) : null}
+      </div>
 
       <div className="table-filter">
         <div className="flex flex-row gap-5">
@@ -80,7 +101,7 @@ export default function Courses() {
         </div>
       </div>
 
-      <CoursesTable data={data} isLoading={isLoading} />
+      <CoursesTable data={data} isLoading={loading} />
 
       {/* Add User Modal */}
       <Modal show={addCourseShow}>
